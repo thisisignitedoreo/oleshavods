@@ -1,0 +1,30 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="css/style.css">
+    <title>архив стримов олёши</title>
+</head>
+<body>
+    <video src="assets/yter-purple2.mp4" loop autoplay muted class="bg"></video>
+    <div class="wrapper">
+        <header>
+            <p class="header-logo">архив стримов олёши</p>
+            <menu class="header-menu">
+                <li><a href="https://t.me/oleshavods">телеграм канал</a></li>
+            </menu>
+        </header>
+        <main>
+            <input type="text" id="search" oninput="search();" placeholder="название стрима, дата, игра...">
+            <p id="search-lil-text">поиск реализован через <a href="https://www.fusejs.io/"><img src="https://www.fusejs.io/assets/img/logo.png" width="16" height="16"> fuse.js</a></p>
+            <table id="main"></table>
+        </main>
+    </div>
+
+    <script defer src="https://unpkg.com/fuse.js@2.4.0"></script>
+    <script defer src="js/script.js"></script>
+</body>
+</html>
