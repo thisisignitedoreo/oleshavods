@@ -104,8 +104,9 @@ main {
         width: auto;
         height: 110%;
         position: fixed;
-        top: -5%;
-        left: -100%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         z-index: -10;
         filter: blur(8px);
         opacity: 40%;
