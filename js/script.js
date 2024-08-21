@@ -8,6 +8,7 @@ let loadData = async () => {
         var newelement = {
             name: element.name,
             date: element.date.map((x) => x.toString().padStart(2, '0')).join('.'),
+            tags: element.tags,
             categories: element.categories,
             link: element.link,
         };
@@ -20,6 +21,7 @@ let renderData = (data) => {
     document.getElementById("main").innerHTML = `
         <tr>
             <th>дата стрима</th>
+            <th>теги</th>
             <th>название стрима</th>
             <th>категории стрима</th>
         </tr>`;
@@ -27,6 +29,7 @@ let renderData = (data) => {
         var htmlel = `
             <tr>
                 <td>${element.date}</td>
+                <td>` + (element.tags !== undefined && element.tags.length !== 0 ? `<span class="tag">${element.tags.join('</span><span class="tag">')}</span>` : `тегов нет!`) + `</td>
                 <td><a href="${element.link}">${element.name}</a></td>
                 ` +
                 (element.categories == null ? `<td>Нету информации!</td>` : `<td><ul>
@@ -52,7 +55,7 @@ var fuse = 0, data = 0;
 window.onload = async () => {
     data = await loadData();
     data.reverse();
-    fuse = new Fuse(data, {keys: ["name", "categories", "date"]});
+    fuse = new Fuse(data, {keys: ["name", "categories", "date", "tags"]});
     search();
     document.getElementById("info").innerHTML = `стримы заливаются с 19.02.2024, всего залито ${data.length} стримов(-а)`;
 };
