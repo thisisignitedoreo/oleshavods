@@ -99,6 +99,10 @@ main {
     align-items: center;
 }
 
+#info {
+    text-align: center;
+}
+
 @media (max-width: 720px) {
     .bg {
         width: auto;

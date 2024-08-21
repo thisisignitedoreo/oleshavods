@@ -54,4 +54,5 @@ window.onload = async () => {
     data.reverse();
     fuse = new Fuse(data, {keys: ["name", "categories", "date"]});
     search();
+    document.getElementById("info").innerHTML = `стримы заливаются с 19.02.2024, всего залито ${data.length} стримов(-а)`;
 };
