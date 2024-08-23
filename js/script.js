@@ -50,6 +50,11 @@ let search = () => {
     else renderData(data);
 };
 
+let reverse = () => {
+    data.reverse();
+    search();
+}
+
 var fuse = 0, data = 0;
 
 window.onload = async () => {
