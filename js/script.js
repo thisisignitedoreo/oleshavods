@@ -30,7 +30,7 @@ let renderData = (data) => {
             <tr>
                 <td>${element.date}</td>
                 <td>` + (element.tags !== undefined && element.tags.length !== 0 ? `<span class="tag">${element.tags.join('</span><span class="tag">')}</span>` : `тегов нет!`) + `</td>
-                <td>` + (element.link == null ? `<span onclick="alert("стрим фактически еще не залит, но уже в списке потому-что скоро будет залит/еще заливается.");">${element.name}</span>` : `<a href="${element.link}">${element.name}</a>`) + `</td>
+                <td>` + (element.link == null ? `<span onclick="alert('cтрим фактически еще не залит, но уже в списке потому-что скоро будет залит/еще заливается.');">${element.name}</span>` : `<a href="${element.link}">${element.name}</a>`) + `</td>
                 ` +
                 (element.categories == null ? `<td>нету информации!</td>` : `<td><ul>
                     ` +
