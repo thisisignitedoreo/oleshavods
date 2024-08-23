@@ -68,6 +68,7 @@ header {
     background-color: rgba(0, 0, 0, 0.5);
     margin-left: 4px;
     margin-bottom: 4px;
+    cursor: pointer;
 }
 
 #main td:nth-child(1),

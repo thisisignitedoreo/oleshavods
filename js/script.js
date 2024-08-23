@@ -29,7 +29,7 @@ let renderData = (data) => {
         var htmlel = `
             <tr>
                 <td>${element.date}</td>
-                <td>` + (element.tags !== undefined && element.tags.length !== 0 ? `<span class="tag">${element.tags.join('</span><span class="tag">')}</span>` : `тегов нет!`) + `</td>
+                <td>` + element.tags.map((x) => `<span class="tag" onclick="document.getElementById('search').value = '#${x}'; search();">${x}</span>`).join('') + `</td>
                 <td>` + (element.link == null ? `<span onclick="alert('cтрим фактически еще не залит, но уже в списке потому-что скоро будет залит/еще заливается.');">${element.name}</span>` : `<a href="${element.link}">${element.name}</a>`) + `</td>
                 ` +
                 (element.categories == null ? `<td>нету информации!</td>` : `<td><ul>
@@ -44,23 +44,38 @@ let renderData = (data) => {
     });
 }
 
+let dateToInt = (x, y) => {
+    var els1 = x.date.split('.').map((x) => parseInt(x));
+    var els2 = y.date.split('.').map((x) => parseInt(x));
+    var a = (els1[0] + els1[1]*100 + els1[2]*10000);
+    var b = (els2[0] + els2[1]*100 + els2[2]*10000);
+    console.log(a);
+    console.log(b);
+    return !order ? b - a : a - b;
+};
+
 let search = () => {
     var searchText = document.getElementById("search").value;
-    if (searchText) renderData(fuse.search(searchText));
-    else renderData(data);
+    if (!searchText) renderData(data);
+    else if (searchText.startsWith("#")) {
+        var filtered = data.filter((x) => x.tags.includes(searchText.slice(1))).toSorted(dateToInt);
+        renderData(filtered);
+    }
+    else renderData(fuse.search(searchText));
 };
 
 let reverse = () => {
     data.reverse();
+    order = !order;
     search();
 }
 
-var fuse = 0, data = 0;
+var fuse, data, order = false;
 
 window.onload = async () => {
     data = await loadData();
     data.reverse();
-    fuse = new Fuse(data, {keys: ["name", "categories", "date", "tags"]});
+    fuse = new Fuse(data, {keys: ["name", "categories", "date"]});
     search();
     document.getElementById("info").innerHTML = `стримы заливаются с 19.02.2024, всего залито ${data.length} стримов(-а)`;
 };
