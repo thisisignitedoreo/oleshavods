@@ -20,6 +20,7 @@ let loadData = async () => {
 let renderData = (data) => {
     document.getElementById("main").innerHTML = `
         <tr>
+            <th>#</th>
             <th>дата стрима</th>
             <th>теги</th>
             <th>название стрима</th>
@@ -27,7 +28,8 @@ let renderData = (data) => {
         </tr>`;
     data.forEach(element => {
         var htmlel = `
-            <tr>
+            <tr id="${element.date}">
+                <td><a href="#${element.date}" class="goto-link">#</a></td>
                 <td>${element.date}</td>
                 <td>` + element.tags.map((x) => `<span class="tag" onclick="document.getElementById('search').value = '#${x}'; search();">${x}</span>`).join('') + `</td>
                 <td>` + (element.link == null ? `<span onclick="alert('cтрим фактически еще не залит, но уже в списке потому-что скоро будет залит/еще заливается.');">${element.name}</span>` : `<a href="${element.link}">${element.name}</a>`) + `</td>
@@ -56,6 +58,9 @@ let dateToInt = (x, y) => {
 
 let search = () => {
     var searchText = document.getElementById("search").value;
+    if (window.history.replaceState) {
+        window.history.replaceState({}, "", window.location.origin + window.location.pathname + "?" + searchText + window.location.hash);
+    }
     if (!searchText) renderData(data);
     else if (searchText.startsWith("#")) {
         var filtered = data.filter((x) => x.tags.includes(searchText.slice(1))).toSorted(dateToInt);
@@ -76,6 +81,12 @@ window.onload = async () => {
     data = await loadData();
     data.reverse();
     fuse = new Fuse(data, {keys: ["name", "categories", "date"]});
+    if (window.location.search) {
+        document.getElementById("search").value = decodeURI(window.location.search.slice(1));
+    }
     search();
+    if (window.location.hash) {
+        document.getElementById(window.location.hash.slice(1)).scrollIntoView();
+    }
     document.getElementById("info").innerHTML = `стримы заливаются с 19.02.2024, всего залито ${data.length} стримов(-а)`;
 };
