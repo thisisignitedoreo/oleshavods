@@ -88,5 +88,5 @@ window.onload = async () => {
     if (window.location.hash) {
         document.getElementById(window.location.hash.slice(1)).scrollIntoView();
     }
-    document.getElementById("info").innerHTML = `стримы заливаются с 19.02.2024, всего залито ${data.length} стримов(-а)`;
+    document.getElementById("info").innerHTML = `стримы заливаются с 10.02.2024, всего залито ${data.length} стримов(-а)`;
 };
