@@ -17,7 +17,10 @@ let loadData = async () => {
     return res;
 };
 
-let renderData = (data) => {
+var loaded = 0;
+var perLoad = 30;
+
+let renderData = (data, load) => {
     document.getElementById("main").innerHTML = `
         <tr>
             <th>#</th>
@@ -26,7 +29,9 @@ let renderData = (data) => {
             <th>название стрима</th>
             <th>категории стрима</th>
         </tr>`;
-    data.forEach(element => {
+    for (let i = 0; i < load; i++) {
+        if (data.length <= i) break;
+        var element = data[i];
         var htmlel = `
             <tr id="${element.date}">
                 <td><a href="#${element.date}" class="goto-link">#</a></td>
@@ -43,30 +48,38 @@ let renderData = (data) => {
             </tr>
         `;
         document.getElementById("main").innerHTML += htmlel;
-    });
-}
+    }
+    if (load < data.length) {
+        document.getElementById("main").innerHTML += "<tr id=\"load-more\"><td></td><td></td><td></td><td><span style=\"text-decoration: underline; cursor: pointer;\" onclick=\"loadMore();\">загрузить еще</span></td><td></td></tr>";
+    }
+};
+
+let renderSearched = () => {
+    var searchText = document.getElementById("search").value;
+    if (!searchText) renderData(data, loaded);
+    else if (searchText.startsWith("#")) {
+        var filtered = data.filter((x) => x.tags.includes(searchText.slice(1))).toSorted(dateToInt);
+        renderData(filtered, loaded);
+    }
+    else renderData(fuse.search(searchText), loaded);
+};
+
+let loadMore = () => {
+    loaded = loaded + perLoad;
+    renderSearched(data);
+};
 
 let dateToInt = (x, y) => {
     var els1 = x.date.split('.').map((x) => parseInt(x));
     var els2 = y.date.split('.').map((x) => parseInt(x));
     var a = (els1[0] + els1[1]*100 + els1[2]*10000);
     var b = (els2[0] + els2[1]*100 + els2[2]*10000);
-    console.log(a);
-    console.log(b);
     return !order ? b - a : a - b;
 };
 
 let search = () => {
-    var searchText = document.getElementById("search").value;
-    if (window.history.replaceState) {
-        window.history.replaceState({}, "", window.location.origin + window.location.pathname + "?" + searchText + window.location.hash);
-    }
-    if (!searchText) renderData(data);
-    else if (searchText.startsWith("#")) {
-        var filtered = data.filter((x) => x.tags.includes(searchText.slice(1))).toSorted(dateToInt);
-        renderData(filtered);
-    }
-    else renderData(fuse.search(searchText));
+    loaded = perLoad;
+    renderSearched();
 };
 
 let reverse = () => {
@@ -77,18 +90,19 @@ let reverse = () => {
 
 var fuse, data, order = false;
 var tg_prefix = "https://t.me/c/2016603750";
+var tg_invite = "https://t.me/oleshavods";
 
 window.onload = async () => {
     data = await loadData();
-    document.getElementById("tglink").href = tg_prefix;
+    document.getElementById("tglink").href = tg_invite;
     data.reverse();
     fuse = new Fuse(data, {keys: ["name", "categories", "date"]});
-    if (window.location.search) {
+    /*if (window.location.search) {
         document.getElementById("search").value = decodeURI(window.location.search.slice(1));
-    }
+    }*/
     search();
-    if (window.location.hash) {
+    /*if (window.location.hash) {
         document.getElementById(window.location.hash.slice(1)).scrollIntoView();
-    }
+    }*/
     document.getElementById("info").innerHTML = `стримы заливаются с 10.02.2024, всего залито ${data.length} стримов(-а)`;
 };
