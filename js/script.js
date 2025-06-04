@@ -54,27 +54,29 @@ let renderData = (data, load) => {
     }
 };
 
-let renderSearched = () => {
-    var searchText = document.getElementById("search").value;
-    if (!searchText) renderData(data, loaded);
-    else if (searchText.startsWith("#")) {
-        var filtered = data.filter((x) => x.tags.includes(searchText.slice(1))).toSorted(dateToInt);
-        renderData(filtered, loaded);
-    }
-    else renderData(fuse.search(searchText), loaded);
-};
-
-let loadMore = () => {
-    loaded = loaded + perLoad;
-    renderSearched(data);
-};
-
 let dateToInt = (x, y) => {
     var els1 = x.date.split('.').map((x) => parseInt(x));
     var els2 = y.date.split('.').map((x) => parseInt(x));
     var a = (els1[0] + els1[1]*100 + els1[2]*10000);
     var b = (els2[0] + els2[1]*100 + els2[2]*10000);
     return !order ? b - a : a - b;
+};
+
+let renderSearched = () => {
+    var searchText = document.getElementById("search").value;
+    if (!searchText) renderData(data, loaded);
+    else if (searchText.startsWith("#")) {
+        var filtered = data.filter((x) => x.tags.includes(searchText.slice(1))).toSorted(dateToInt);
+        renderData(filtered, loaded);
+    } else if (searchText.startsWith("?")) {
+        var filtered = data.filter((x) => x.categories && x.categories.includes(searchText.slice(1))).toSorted(dateToInt);
+        renderData(filtered, loaded);
+    } else renderData(fuse.search(searchText), loaded);
+};
+
+let loadMore = () => {
+    loaded = loaded + perLoad;
+    renderSearched(data);
 };
 
 let search = () => {
