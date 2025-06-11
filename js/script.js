@@ -37,7 +37,7 @@ let renderData = (data, load) => {
                 <td><a href="#${element.date}" class="goto-link">#</a></td>
                 <td>${element.date}</td>
                 <td>` + element.tags.map((x) => `<span class="tag" onclick="document.getElementById('search').value = '#${x}'; search();">${x}</span>`).join('') + `</td>
-                <td>` + (element.link == null ? `<span onclick="alert('cтрим фактически еще не залит, но уже в списке потому-что скоро будет залит/еще заливается.');">${element.name}</span>` : `<a href="${tg_prefix}/${element.link}">${element.name}</a>`) + `</td>
+                <td>` + (element.link == null ? `<span onclick="alert('cтрим фактически еще не залит, но уже в списке потому-что скоро будет залит/еще заливается.');">${element.name}</span>` : `<a href="${element.link}">${element.name}</a>`) + `</td>
                 ` +
                 (element.categories == null ? `<td>нету информации!</td>` : `<td><ul>
                     ` +
@@ -91,7 +91,7 @@ let reverse = () => {
 }
 
 var fuse, data, order = false;
-var tg_prefix = "https://t.me/c/2016603750";
+//var tg_prefix = "https://t.me/c/2016603750";
 var tg_invite = "https://t.me/oleshavods";
 
 window.onload = async () => {
